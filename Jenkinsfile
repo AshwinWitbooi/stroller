@@ -36,7 +36,7 @@ pipeline {
                 bat "mvn test"
             }
         }
-        stage('Test') {
+        stage('Deploy') {
             steps {
                 // Execute Maven Spring Boot run
                 bat "mvn spring-boot:run"
