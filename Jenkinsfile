@@ -12,7 +12,7 @@ pipeline {
     }
     
     stages {
-        stage('CodeP_Checkout') {
+        stage('Code_Checkout') {
             steps {
                 checkout([
                     $class: 'GitSCM',
@@ -26,14 +26,20 @@ pipeline {
         }
         stage('Build') {
             steps {
-              // To run Maven on a Windows agent, use
-                bat "mvn -Dmaven.test.skip=true clean package"
+              // Execute clean and build
+                bat "mvn -Dmaven.test.skip=true clean compile"
             }
         }
         stage('Test') {
             steps {
-                // To run Maven on a Windows agent, use
+                // Execute application test
                 bat "mvn test"
+            }
+        }
+        stage('Test') {
+            steps {
+                // Execute Maven Spring Boot run
+                bat "mvn spring-boot:run"
             }
         }
 
