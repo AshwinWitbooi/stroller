@@ -9,6 +9,7 @@ pipeline {
     environment {
         GITHUB_CREDENTIALS = 'GitHub credential'  // Jenkins credentials ID
         REPO_URL = 'https://github.com/AshwinWitbooi/stroller.git'  // GitHub repository URL
+        DOCKER_CONTAINER = 'stroller' //
     }
     
     stages {
@@ -36,10 +37,36 @@ pipeline {
                 bat "mvn test"
             }
         }
-        stage('Deploy') {
+        stage('Stop Container') {
             steps {
-                // Execute Maven Spring Boot run
-                bat "mvn spring-boot:run"
+                // Stop container
+                bat "docker stop ${DOCKER_CONTAINER}"                
+                exit 0 // always continue pipeline
+            }
+        }
+        stage('Remove Container') {
+            steps {
+                // Remove 
+                bat "docker rm ${DOCKER_CONTAINER}"                
+                exit 0 // always continue pipeline
+            }
+        }
+        stage('Remove Image') {
+            steps {
+                // Remove Docker image
+                bat "docker rmi ${DOCKER_CONTAINER}"
+            }
+        }
+        stage('Create Image') {
+            steps {
+                // Build Docker image
+                bat "docker build -t ${DOCKER_CONTAINER} ."
+            }
+        }
+        stage('Run Container Detached Mode') {
+            steps {
+                // Run Spring boot application Docker container in detached mode
+                bat "docker run -d -p 10100:8080 e SPRING_PROFILES_ACTIVE=dev ${DOCKER_CONTAINER}"
             }
         }
 
