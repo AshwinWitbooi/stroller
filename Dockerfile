@@ -7,8 +7,5 @@ WORKDIR /app
 # Copy the jar file from the target directory into the container
 COPY target/*.jar app.jar
 
-# Make the app listen on port 8080
-EXPOSE 8080
-
 # Command to run the jar file
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
