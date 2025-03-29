@@ -40,7 +40,8 @@ pipeline {
         stage('Stop Container') {
             steps {
                 // Stop container and always exit with 0 continue pipeline
-                bat "docker stop ${DOCKER_CONTAINER} | exit 0"           
+                bat "docker stop ${DOCKER_CONTAINER}"       
+                bat "exit 0"      
             }
         }
         stage('Remove Container') {
