@@ -39,22 +39,20 @@ pipeline {
         }
         stage('Stop Container') {
             steps {
-                // Stop container
-                bat "docker stop ${DOCKER_CONTAINER}"                
-                exit 0 // always continue pipeline
+                // Stop container and always exit with 0 continue pipeline
+                bat "docker stop ${DOCKER_CONTAINER} | exit 0"           
             }
         }
         stage('Remove Container') {
             steps {
-                // Remove 
-                bat "docker rm ${DOCKER_CONTAINER}"                
-                exit 0 // always continue pipeline
+                // Remove container and always exit with 0 continue pipeline
+                bat "docker rm ${DOCKER_CONTAINER} | exit 0"                
             }
         }
         stage('Remove Image') {
             steps {
-                // Remove Docker image
-                bat "docker rmi ${DOCKER_CONTAINER}"
+                // Remove Docker image and always exit with 0 continue pipeline
+                bat "docker rmi ${DOCKER_CONTAINER} | exit 0"
             }
         }
         stage('Create Image') {
