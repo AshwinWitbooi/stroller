@@ -40,20 +40,50 @@ pipeline {
         stage('Stop Container') {
             steps {
                 // Stop container and always exit with 0 continue pipeline
-                bat "docker stop ${DOCKER_CONTAINER}"       
-                bat "exit 0"      
+                bat """
+					set CONTAINER_NAME=${DOCKER_CONTAINER}
+					
+					REM Check if the container is running
+					docker ps --filter "name=%CONTAINER_NAME%" --format "{{.Names}}" | findstr /I "%CONTAINER_NAME%" >nul
+					
+					REM Check the error level
+					if %errorlevel%==0 (
+					    echo Container "%CONTAINER_NAME%" is running.
+					    docker stop "%CONTAINER_NAME%
+					    docker rm "%CONTAINER_NAME%
+					) else (
+					    echo Container "%CONTAINER_NAME%" is NOT running.
+					    docker rm "%CONTAINER_NAME%
+					)       
+					exit 0         
+                """
+                //bat "docker stop ${DOCKER_CONTAINER}"       
+                //bat "exit 0"      
             }
         }
         stage('Remove Container') {
             steps {
                 // Remove container and always exit with 0 continue pipeline
-                bat "docker rm ${DOCKER_CONTAINER} | exit 0"                
+                bat "docker rm ${DOCKER_CONTAINER}"
+                bat "exit 0"             
             }
         }
-        stage('Remove Image') {
+        stage('Remove or Create Image') {
             steps {
+            	bat """
+	            	SET IMAGE_NAME=${DOCKER_CONTAINER}:latest
+	
+					docker images --format "{{.Repository}}:{{.Tag}}" | findstr /I "%IMAGE_NAME%" > nul
+					IF %ERRORLEVEL% EQU 0 (
+					    echo Docker image %IMAGE_NAME% exists.
+					    docker rmi ${DOCKER_CONTAINER}
+					    echo Docker image ${DOCKER_CONTAINER} removed.
+					    exit 0
+					)
+            	"""
                 // Remove Docker image and always exit with 0 continue pipeline
-                bat "docker rmi ${DOCKER_CONTAINER} | exit 0"
+                //bat "docker rmi ${DOCKER_CONTAINER}"
+                //bat "exit 0"
             }
         }
         stage('Create Image') {
