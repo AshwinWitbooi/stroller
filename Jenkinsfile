@@ -37,9 +37,9 @@ pipeline {
                 bat "mvn test"
             }
         }
-        stage('Stop Container') {
+        stage('Stop and Remove Container') {
             steps {
-                // Stop container and always exit with 0 continue pipeline
+                // Check if containing is running and remove else check if container is stopped and removed
                 bat """
 					set CONTAINER_NAME=${DOCKER_CONTAINER}
 					
@@ -51,15 +51,24 @@ pipeline {
 					    echo Container "%CONTAINER_NAME%" is running.
 					    docker stop "%CONTAINER_NAME%
 					    docker rm "%CONTAINER_NAME%
-					    
+					) else (
+						echo Container "%CONTAINER_NAME%" is NOT running.
+						REM Check if the container is running
+						docker ps --filter "name=%CONTAINER_NAME%" --all --format "{{.Names}}" | findstr /I "%CONTAINER_NAME%" >nul
+						REM Check if the container is stopped but exist and remove else exit successful
+						if %errorlevel%==0 (
+						    echo Container "%CONTAINER_NAME%" is running.
+						    docker rm "%CONTAINER_NAME%
+						) 
 					) 
-					     
-					       
+					REM exit successful      
+					exit 0         
                 """
                 //bat "docker stop ${DOCKER_CONTAINER}"       
                 //bat "exit 0"      
             }
         }
+
 
     }
 }
