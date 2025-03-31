@@ -37,9 +37,14 @@ pipeline {
                 bat "mvn test"
             }
         }
+    	stage('Package') {
+            steps {
+                // Package application as jar
+                bat "package"
+            }
+        }
         stage('Stop and Remove Container') {
             steps {
-                // Check if containing is running and remove else check if container is stopped and removed
                 bat """
 					set CONTAINER_NAME=${DOCKER_CONTAINER}
 					
@@ -67,7 +72,6 @@ pipeline {
             }
         }
         stage('Remove or Create Image') {
-        	// Check if image exist and remove it, before creating it again else just remove image
             steps {
             	bat """
 	            	SET IMAGE_NAME=${DOCKER_CONTAINER}:latest
@@ -87,10 +91,9 @@ pipeline {
             }
         }
        stage('Run Container Detached Mode') {
-       		//Run container in detached mode using dev profile
             steps {
                 // Run Spring boot application Docker container in detached mode
-                bat "docker run -d -p 10100:8080 e SPRING_PROFILES_ACTIVE=dev ${DOCKER_CONTAINER}"
+                bat "docker run -d -p 10100:8080 e SPRING_PROFILES_ACTIVE=dev --name=${DOCKER_CONTAINER} ${DOCKER_CONTAINER}"
             }
         }
 
