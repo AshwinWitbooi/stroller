@@ -1,11 +1,14 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:17-jdk-slim
+# Use OpenJDK 17 as the base image
+FROM openjdk:17-jdk-alpine
 
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy the jar file from the target directory into the container
+# Copy the JAR file from the target directory
 COPY target/*.jar app.jar
 
-# Command to run the jar file
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# Expose the port your app will run on
+EXPOSE 8080
+
+# Run the Spring Boot app
+ENTRYPOINT ["java", "-jar", "app.jar"]
