@@ -55,47 +55,14 @@ pipeline {
 					if %errorlevel%==0 (
 					    echo Container "%CONTAINER_NAME%" is running.
 					    docker stop "%CONTAINER_NAME%
+					    echo Container "%CONTAINER_NAME%" stopped.
 					    docker rm "%CONTAINER_NAME%
-					) else (
-						echo Container "%CONTAINER_NAME%" is NOT running.
-						REM Check if the container is running
-						docker ps --filter "name=%CONTAINER_NAME%" --all --format "{{.Names}}" | findstr /I "%CONTAINER_NAME%" >nul
-						REM Check if the container is stopped but exist and remove else exit successful
-						if %errorlevel%==0 (
-						    echo Container "%CONTAINER_NAME%" is running.
-						    docker rm "%CONTAINER_NAME%
-						) 
-					) 
+					    echo Container "%CONTAINER_NAME%" removed.
+					)
 					REM exit successful      
-					exit 0         
+					exit 0           
                 """   
             }
         }
-        stage('Remove or Create Image') {
-            steps {
-            	bat """
-	            	SET IMAGE_NAME=${DOCKER_CONTAINER}:latest
-	
-					docker images --format "{{.Repository}}:{{.Tag}}" | findstr /I "%IMAGE_NAME%" > nul
-					if %ERRORLEVEL% EQU 0 (
-					    echo Docker image %IMAGE_NAME% exists.
-					    docker rmi ${DOCKER_CONTAINER}
-					    echo Docker image %IMAGE_NAME%" removed and create new image
-					    bat "docker build -t ${DOCKER_CONTAINER} ."
-					    exit 0
-					)else (
-					    echo Create new image
-					    bat "docker build -t ${DOCKER_CONTAINER} ."					
-					)
-            	"""
-            }
-        }
-       stage('Run Container Detached Mode') {
-            steps {
-                // Run Spring boot application Docker container in detached mode
-                bat "docker run -d -p 10100:8080 e SPRING_PROFILES_ACTIVE=dev --name=${DOCKER_CONTAINER} ${DOCKER_CONTAINER}"
-            }
-        }
-
     }
 }
