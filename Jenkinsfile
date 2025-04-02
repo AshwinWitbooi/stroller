@@ -40,7 +40,7 @@ pipeline {
     	stage('Package') {
             steps {
                 // Package application as jar
-                bat "package"
+                bat "mvn package"
             }
         }
         stage('Stop and Remove Container') {
