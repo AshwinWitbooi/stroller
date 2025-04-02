@@ -64,5 +64,24 @@ pipeline {
                 """   
             }
         }
+        stage('Remove or Create Image') {
+            steps {
+            	bat """
+	            	SET IMAGE_NAME=${DOCKER_CONTAINER}:latest
+	
+					docker images --format "{{.Repository}}:{{.Tag}}" | findstr /I "%IMAGE_NAME%" > nul
+					if %ERRORLEVEL% EQU 0 (
+					    echo Docker image %IMAGE_NAME% exists.
+					    docker rmi ${DOCKER_CONTAINER}
+					    echo Docker image %IMAGE_NAME%" removed and create new image
+					    bat "docker build -t ${DOCKER_CONTAINER} ."
+					    exit 0
+					)else (
+					    echo Create new image
+					    bat "docker build -t ${DOCKER_CONTAINER} ."					
+					)
+            	"""
+            }
+        }
     }
 }
