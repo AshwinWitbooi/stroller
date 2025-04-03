@@ -72,13 +72,13 @@ pipeline {
 					docker images --format "{{.Repository}}:{{.Tag}}" | findstr /I "%IMAGE_NAME%" > nul
 					if %ERRORLEVEL% EQU 0 (
 					    echo Docker image %IMAGE_NAME% exists.
-					    docker rmi ${DOCKER_CONTAINER}
+					    docker rmi %IMAGE_NAME%
 					    echo Docker image %IMAGE_NAME%" removed and create new image
-					    docker build -t ${DOCKER_CONTAINER} .
+					    docker build -t %IMAGE_NAME% .
 					    exit 0
 					)else (
 					    echo Create new image
-					    docker build -t ${DOCKER_CONTAINER} .				
+					    docker build -t %IMAGE_NAME% .				
 					)
             	"""
             }
