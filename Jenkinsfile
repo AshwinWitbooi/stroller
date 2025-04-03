@@ -83,5 +83,11 @@ pipeline {
             	"""
             }
         }
+        stage('Run Container Detached Mode') {
+            steps {
+                // Run Spring boot application Docker container in detached mode
+                bat "docker run -d -p 10100:8080 e SPRING_PROFILES_ACTIVE=dev --name=${DOCKER_CONTAINER} ${DOCKER_CONTAINER}"
+            }
+        }
     }
 }
