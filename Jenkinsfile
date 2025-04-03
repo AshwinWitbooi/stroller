@@ -64,25 +64,6 @@ pipeline {
                 """   
             }
         }
-        stage('Remove or Create Image') {
-            steps {
-            	bat """
-	            	SET IMAGE_NAME=${DOCKER_CONTAINER}:latest
-	
-					docker images --format "{{.Repository}}:{{.Tag}}" | findstr /I "%IMAGE_NAME%" > nul
-					if %ERRORLEVEL% EQU 0 (
-					    echo Docker image %IMAGE_NAME% exists.
-					    docker rmi %IMAGE_NAME%
-					    echo Docker image %IMAGE_NAME%" removed and create new image
-					    docker build -t %IMAGE_NAME% .
-					    exit 0
-					)else (
-					    echo Create new image
-					    docker build -t %IMAGE_NAME% .				
-					)
-            	"""
-            }
-        }
         stage('Run Container Detached Mode') {
             steps {
                 // Run Spring boot application Docker container in detached mode
