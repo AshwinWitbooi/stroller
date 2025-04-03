@@ -74,11 +74,11 @@ pipeline {
 					    echo Docker image %IMAGE_NAME% exists.
 					    docker rmi ${DOCKER_CONTAINER}
 					    echo Docker image %IMAGE_NAME%" removed and create new image
-					    bat "docker build -t ${DOCKER_CONTAINER} ."
+					    docker build -t ${DOCKER_CONTAINER} .
 					    exit 0
 					)else (
 					    echo Create new image
-					    bat "docker build -t ${DOCKER_CONTAINER} ."					
+					    docker build -t ${DOCKER_CONTAINER} .				
 					)
             	"""
             }
