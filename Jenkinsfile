@@ -67,7 +67,7 @@ pipeline {
         stage('Run Container Detached Mode') {
             steps {
                 // Run Spring boot application Docker container in detached mode
-                bat "docker run -d p 10100:8080 stroller"
+                bat "docker run -d -p 10100:8080 --name stroller stroller"
             }
         }
     }
