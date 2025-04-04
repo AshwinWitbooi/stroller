@@ -53,11 +53,13 @@ pipeline {
 					
 					REM Check the error level
 					if %errorlevel%==0 (
+					    echo Container "%CONTAINER_NAME%" is NOT running.
+					) else (
 					    echo Container "%CONTAINER_NAME%" is running.
 					    docker stop "%CONTAINER_NAME%
 					    echo Container "%CONTAINER_NAME%" stopped.
 					    docker rm "%CONTAINER_NAME%
-					    echo Container "%CONTAINER_NAME%" removed.
+					    echo Container "%CONTAINER_NAME%" removed.					
 					)
 					REM exit successful      
 					exit 0           
