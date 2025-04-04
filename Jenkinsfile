@@ -9,7 +9,7 @@ pipeline {
     environment {
         GITHUB_CREDENTIALS = 'GitHub credential'  // Jenkins credentials ID
         REPO_URL = 'https://github.com/AshwinWitbooi/stroller.git'  // GitHub repository URL
-        DOCKER_CONTAINER = 'stroller' //
+        APP_NAME = 'stroller' //
     }
     
     stages {
@@ -46,7 +46,7 @@ pipeline {
         stage('Stop and Remove Container') {
             steps {
                 bat """
-					set CONTAINER_NAME=${DOCKER_CONTAINER}
+					set CONTAINER_NAME=${APP_NAME}
 					
 					REM Check if the container is running
 					docker ps --filter "name=%CONTAINER_NAME%" --format "{{.Names}}" | findstr /I "%CONTAINER_NAME%" >nul
@@ -67,7 +67,7 @@ pipeline {
         stage('Run Container Detached Mode') {
             steps {
                 // Run Spring boot application Docker container in detached mode
-                bat "docker run -d -p 10100:8080 --name stroller stroller"
+                bat "docker run -d -p 10100:8080 --name ${APP_NAME} -e SPRING_PROFILES_ACTIVE=dev ${APP_NAME}"
             }
         }
     }
