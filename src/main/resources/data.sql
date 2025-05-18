@@ -1,4 +1,4 @@
-INSERT INTO stroller (name, location, latitude, longitude) VALUES
+INSERT INTO stroll (name, location, latitude, longitude) VALUES
 (1,'Central Park, New York, NY', 40.785091, -73.968285),
 (2,'Eiffel Tower, Paris, France', 48.8584, 2.2945),
 (3,'Colosseum, Rome, Italy', 41.8902, 12.4922),
