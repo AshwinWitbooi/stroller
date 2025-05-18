@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import za.co.ashtech.stroller.db.entities.StrollerDEntity;
+import za.co.ashtech.stroller.db.entities.Stroll;
 
 @SpringBootTest
 class DatabaseLayerTests {
@@ -20,10 +20,9 @@ class DatabaseLayerTests {
 	void testStrollerRepository() {
 		assertNotNull(strollerRepository);
 		
-		List<StrollerDEntity> allStrollerRecord = strollerRepository.findAll();
+		List<Stroll> allStrollerRecord = strollerRepository.findAll();
 		assertNotNull(allStrollerRecord);
 		allStrollerRecord.forEach(System.out::println);
-//		System.out.println(allStrollerRecord);
 	}
 
 }

@@ -1,39 +1,40 @@
 package za.co.ashtech.stroller.services;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import za.co.ashtech.stroller.controller.entities.Stroll;
-import za.co.ashtech.stroller.db.entities.StrollerDEntity;
 import za.co.ashtech.stroller.db.repo.StrollerRepository;
+import za.co.ashtech.stroller.util.StrollerServiceException;
 
 @Slf4j
 @Service
 public class StrollerServiceImpl implements StrollerService {
-	
+
 	@Autowired
 	private StrollerRepository strollerRepository;
 
 	@Override
-	public Stroll getRandomStrol() {
+	public Stroll getRandomStrol() throws StrollerServiceException {
 
-		//Get all records and return random one
-		Optional<StrollerDEntity> selectedStrollDBE = strollerRepository.findAll().stream().findAny();
+		// Get all records
+		List<za.co.ashtech.stroller.db.entities.Stroll> strollRecordsList = strollerRepository.findAll();
+		Random rand = new Random();
+
+		Optional<za.co.ashtech.stroller.db.entities.Stroll> opStrollDbe = Optional.ofNullable(strollRecordsList.get(rand.nextInt(strollRecordsList.size())));
 		log.debug("Random database record successfully returned.");
 		
-		StrollerDEntity dEntity = selectedStrollDBE.orElseGet(() -> getDefaultStroll());
-		
-		Stroll stroll =  new Stroll(dEntity.getName(), dEntity.getLocation(),Double.toString(dEntity.getLongitude()),Double.toString( dEntity.getLatitude()));
-		
-		return stroll;
-		
-	}
-	
-	private StrollerDEntity getDefaultStroll() {
-		return strollerRepository.findById(Long.valueOf(1)).get();
+		za.co.ashtech.stroller.db.entities.Stroll dEntity = opStrollDbe
+				.orElseThrow(() -> new StrollerServiceException("Unable to successfully retrieve a random Stroll."));
+
+		return new Stroll(dEntity.getName(), dEntity.getLocation(), Double.toString(dEntity.getLongitude()),
+				Double.toString(dEntity.getLatitude()));
+
 	}
 
 }
