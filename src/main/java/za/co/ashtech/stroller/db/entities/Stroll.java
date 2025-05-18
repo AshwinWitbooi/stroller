@@ -3,8 +3,8 @@ package za.co.ashtech.stroller.db.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "STROLLER")
-public class StrollerDEntity {
+@Table(name = "STROLL")
+public class Stroll {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +20,10 @@ public class StrollerDEntity {
     private Double longitude;
 
     // Constructors
-    public StrollerDEntity() {
+    public Stroll() {
     }
 
-    public StrollerDEntity(String name, String location, Double latitude, Double longitude) {
+    public Stroll(String name, String location, Double latitude, Double longitude) {
         this.name = name;
         this.location = location;
         this.latitude = latitude;
