@@ -1,6 +1,7 @@
 package za.co.ashtech.stroller.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +17,8 @@ public class StrollerController {
     private StrollerService strollerService;
 
     @GetMapping("stroll")
-    public Stroll getAllCustomers() {
-        return strollerService.getRandomStrol();
+    public ResponseEntity<Stroll> getAllCustomers() {
+        return ResponseEntity.ok(strollerService.getRandomStroll());
     }
 
 }
