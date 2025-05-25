@@ -20,7 +20,7 @@ public class StrollerServiceImpl implements StrollerService {
 	private StrollerRepository strollerRepository;
 
 	@Override
-	public Stroll getRandomStrol() throws StrollerServiceException {
+	public Stroll getRandomStroll() throws StrollerServiceException {
 
 		// Get all records
 		List<za.co.ashtech.stroller.db.entities.Stroll> strollRecordsList = strollerRepository.findAll();
