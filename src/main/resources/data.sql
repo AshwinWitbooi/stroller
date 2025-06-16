@@ -19,3 +19,7 @@ INSERT INTO stroll (name, location, latitude, longitude) VALUES
 ('Red Square','Red Square, Moscow, Russia', 55.7558, 37.6176),
 ('Berlin1','Berlin Wall, Berlin, Germany', 52.5160, 13.3777),
 ('Khalifa20','Burj Khalifa, Dubai, UAE', 25.1975, 55.2744);
+
+INSERT INTO stroll_user (username, password, role) VALUES
+('appuser', '$2a$10$GT.htEiAcptcoZowszAoJ.Tg08XZwM1VLnnvNStyvTg9yMGCeIRd.','APP_USER'),
+('adminuser', '$2a$10$GT.htEiAcptcoZowszAoJ.Tg08XZwM1VLnnvNStyvTg9yMGCeIRd.','ADMIN_USER');
