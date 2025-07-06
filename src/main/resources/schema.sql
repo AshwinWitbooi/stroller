@@ -12,3 +12,12 @@ CREATE TABLE stroll_user (
     password VARCHAR(255),
     role VARCHAR(255)
 );
+
+CREATE TABLE stroll_transaction_log (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id VARCHAR(255) NOT NULL,
+    transaction_type VARCHAR(255),
+    transaction_result VARCHAR(255),
+    transaction_timestamp TIMESTAMP
+);
+
