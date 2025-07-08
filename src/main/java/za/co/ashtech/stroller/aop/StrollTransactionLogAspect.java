@@ -14,7 +14,7 @@ import za.co.ashtech.stroller.db.repo.StrollTransactionLogRepository;
 
 @Aspect
 @Component
-public class AuditTrailAspect {
+public class StrollTransactionLogAspect {
 	
 	@Autowired
 	private StrollTransactionLogRepository auditTrailRepository;
