@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import za.co.ashtech.stroller.controller.entities.Stroll;
 import za.co.ashtech.stroller.services.StrollerAdminService;
@@ -23,24 +22,18 @@ public class AdminStrollerController extends BaseController{
     private StrollerAdminService strollerAdminService;
 
     @PostMapping("stroll")
-    public ResponseEntity<Void> addStroll(@RequestBody Stroll stroll,@RequestParam(required = false) String userId) throws StrollerServiceException{
-    	//validate userId request param
-    	validateUserIdRequestParam(userId);
+    public ResponseEntity<Void> addStroll(@RequestBody Stroll stroll) throws StrollerServiceException{
     	strollerAdminService.addStroll(stroll);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
         
     @PutMapping("stroll/{id}")
-    public ResponseEntity<Stroll> updateStroll(@PathVariable Long id,@RequestBody Stroll stroll,@RequestParam(required = false) String userId) throws StrollerServiceException{
-    	//validate userId request param
-    	validateUserIdRequestParam(userId);
+    public ResponseEntity<Stroll> updateStroll(@PathVariable Long id,@RequestBody Stroll stroll) throws StrollerServiceException{
     	return ResponseEntity.ok(strollerAdminService.updateStroll(id, stroll));
     }
     
     @DeleteMapping("stroll/{id}")
-    public ResponseEntity<Void> deleteStroll(@PathVariable Long id,@RequestParam(required = false) String userId) throws StrollerServiceException{
-    	//validate userId request param
-    	validateUserIdRequestParam(userId);
+    public ResponseEntity<Void> deleteStroll(@PathVariable Long id) throws StrollerServiceException{
     	strollerAdminService.deleteStroll(id);
         return ResponseEntity.noContent().build();
     }
