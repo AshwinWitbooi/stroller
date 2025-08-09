@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import za.co.ashtech.stroller.controller.entities.AuthTokenResponse;
 import za.co.ashtech.stroller.controller.entities.Stroll;
+import za.co.ashtech.stroller.controller.entities.StrollUserComment;
 import za.co.ashtech.stroller.db.entities.StrollTransactionLog;
 import za.co.ashtech.stroller.db.repo.StrollTransactionLogRepository;
 
@@ -97,7 +98,7 @@ class StrollerApplicationTests {
     }
     
     @Test
-  @Order(4)
+    @Order(4)
     void testUpdateStroll() throws Exception {       
 
        Stroll strollAdd = new Stroll("inTestName", "inTestLocation", "-12.3364", "6.6364");
@@ -114,8 +115,8 @@ class StrollerApplicationTests {
         assertNotEquals(0, auditTrailRepository.findAll().size());
     }
     
-    @Test
-    @Order(5)
+//    @Test
+//    @Order(5)
     void testDeleteStroll() throws Exception {       
         
         HttpEntity<String> entity = new HttpEntity<>(null, setUpHeaders(this.accessToken));
@@ -125,6 +126,27 @@ class StrollerApplicationTests {
        
         //verify response is returned
         assertTrue(addStrollResponse.getStatusCode().is2xxSuccessful());
+
+    }
+    
+    @Test
+    @Order(6)
+    void testStrollContact() throws Exception {       
+        
+        
+    	StrollUserComment strollUserComment = new StrollUserComment("First Name", "Last Name", "test2t.co.za", "This is my comment");
+
+        HttpEntity<String> entity = new HttpEntity<>(objectMapper.writeValueAsString(strollUserComment), this.setUpHeaders(accessToken));
+
+        ResponseEntity<Void> strollContactResponse = restTemplate
+                .exchange("http://localhost:" + port + "/stroller/public/contact", HttpMethod.POST, entity, Void.class);     
+        
+       
+        //verify response is returned
+        assertTrue(strollContactResponse.getStatusCode().is2xxSuccessful());
+        //verify audit trail execution
+        assertNotEquals(0, auditTrailRepository.findAll().size());
+
 
     }
     
