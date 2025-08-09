@@ -21,3 +21,12 @@ CREATE TABLE stroll_transaction_log (
     transaction_timestamp TIMESTAMP
 );
 
+CREATE TABLE stroll_contact (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(255) NOT NULL,
+    last_name VARCHAR(255),
+    email VARCHAR(255) NOT NULL,
+    user_comment VARCHAR(255) NOT NULL,
+    comment_timestamp TIMESTAMP
+);
+

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import jakarta.servlet.http.HttpServletRequest;
+import za.co.ashtech.stroller.controller.entities.StrollUserComment;
 import za.co.ashtech.stroller.db.entities.StrollTransactionLog;
 import za.co.ashtech.stroller.db.repo.StrollTransactionLogRepository;
 
@@ -35,8 +36,23 @@ public class StrollTransactionLogAspect {
 	    if (attrs != null) {
 		   request = attrs.getRequest();
 		}
-
-	    userId = request.getParameter("userId");
+	    
+	    
+		/*
+		 * Only extract userId from parameters if ist not a postContact else get from
+		 * method args object
+		 */
+	    if(!transacionType.equalsIgnoreCase("postContact")) {
+	    	userId = request.getParameter("userId");
+	    }else {
+	    	StrollUserComment strollUserComment = (StrollUserComment) joinPoint.getArgs()[0];
+	    	if(strollUserComment != null) {
+	    		userId = strollUserComment.getEmail();
+	    	}else {
+	    		userId = "anon@anon.co.za";
+	    	}
+	    	
+	    }
         	
         // continue method execution
         Object result = joinPoint.proceed();

@@ -29,6 +29,7 @@ public class SecurityConfig {
         	.securityMatcher("/oauth/**")
         	.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+            	.requestMatchers("/public/**").permitAll()
                 .requestMatchers("/oauth/access/token").authenticated()
                 .anyRequest().permitAll()
             )
