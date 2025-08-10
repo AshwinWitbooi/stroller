@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "firstname", "lastname", "email", "comment", "comment_timestamp" })
-public class StrollUserComment {
+public class StrollUserCommentRequest {
 
 	@NotNull
 	@JsonProperty("firstname")
@@ -32,7 +32,7 @@ public class StrollUserComment {
 	private Map<String, Object> additionalProperties = new LinkedHashMap<String, Object>();
 
 		
-	public StrollUserComment(@NotNull String firstname, @NotNull String lastname, @NotNull String email,
+	public StrollUserCommentRequest(@NotNull String firstname, @NotNull String lastname, @NotNull String email,
 			@NotNull String comment) {
 		super();
 		this.firstname = firstname;

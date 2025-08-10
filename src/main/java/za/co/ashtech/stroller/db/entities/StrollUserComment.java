@@ -5,8 +5,8 @@ import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "STROLL_CONTACT")
-public class StrollContact {
+@Table(name = "STROLL_USER_COMMENT")
+public class StrollUserComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +22,11 @@ public class StrollContact {
     @Column(name = "comment_timestamp")
     private LocalDateTime commentTimestamp;
     
-	public StrollContact() {
+	public StrollUserComment() {
 		super();
 	}
     
-	public StrollContact(String firstname, String lastname, String email, String userComment) {
+	public StrollUserComment(String firstname, String lastname, String email, String userComment) {
 		super();
 		this.firstname = firstname;
 		this.lastname = lastname;

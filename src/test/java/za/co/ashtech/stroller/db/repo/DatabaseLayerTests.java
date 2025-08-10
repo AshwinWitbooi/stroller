@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.extern.slf4j.Slf4j;
 import za.co.ashtech.stroller.db.entities.Stroll;
-import za.co.ashtech.stroller.db.entities.StrollContact;
+import za.co.ashtech.stroller.db.entities.StrollUserComment;
 import za.co.ashtech.stroller.db.entities.StrollTransactionLog;
 
 @Slf4j
@@ -23,7 +23,7 @@ class DatabaseLayerTests {
 	@Autowired
 	private StrollTransactionLogRepository auditTrailRepository;
 	@Autowired
-	private StrollContactRepository strollContactRepository;
+	private StrollUserCommentRepository strollContactRepository;
 
 	@Test
 	void testStrollerRepository() {
@@ -44,8 +44,8 @@ class DatabaseLayerTests {
 	
 	@Test
 	void testUserContactPersist() {
-		strollContactRepository.save(new StrollContact("John", "Drey", "jd@test.com", "This is my test comment. AWE"));
-		List<StrollContact> verifyRecords = strollContactRepository.findAll();
+		strollContactRepository.save(new StrollUserComment("John", "Drey", "jd@test.com", "This is my test comment. AWE"));
+		List<StrollUserComment> verifyRecords = strollContactRepository.findAll();
 		assertNotEquals(0,verifyRecords.size());
 		log.info(verifyRecords.get(0).toString()); 
 	}

@@ -8,20 +8,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import za.co.ashtech.stroller.controller.entities.StrollUserComment;
-import za.co.ashtech.stroller.services.StrollerContactService;
+import za.co.ashtech.stroller.controller.entities.StrollUserCommentRequest;
+import za.co.ashtech.stroller.services.StrollerUserCommentService;
 import za.co.ashtech.stroller.util.StrollerServiceException;
 
 @RestController
 @RequestMapping("public")
-public class StrollerContactPostController{
+public class StrollerUserCommentController{
 
     @Autowired
-    private StrollerContactService strollerContactService;
+    private StrollerUserCommentService strollerContactService;
 
-    @PostMapping("contact")
-    public ResponseEntity<Void> postUserComment(@RequestBody StrollUserComment strollUserComment) throws StrollerServiceException{
-    	strollerContactService.postContact(strollUserComment);
+    @PostMapping("comment")
+    public ResponseEntity<Void> postUserComment(@RequestBody StrollUserCommentRequest strollUserComment) throws StrollerServiceException{
+    	strollerContactService.postComment(strollUserComment);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
