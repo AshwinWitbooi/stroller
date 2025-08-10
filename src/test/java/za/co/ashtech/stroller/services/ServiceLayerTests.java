@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import lombok.extern.slf4j.Slf4j;
 import za.co.ashtech.stroller.controller.entities.Stroll;
+import za.co.ashtech.stroller.controller.entities.StrollUserCommentRequest;
+import za.co.ashtech.stroller.db.repo.StrollUserCommentRepository;
 
 @Slf4j
 @SpringBootTest
@@ -17,6 +19,10 @@ class ServiceLayerTests {
 	private StrollerService strollerService;
 	@Autowired
 	private StrollerAdminService strollerAdminService;
+	@Autowired
+	private StrollerUserCommentService strollerUserCommentService;
+	@Autowired
+	private StrollUserCommentRepository strollUserCommentRepository;
 
 	@Test
 	void testGetRandomStroll() {
@@ -52,6 +58,13 @@ class ServiceLayerTests {
 		assertNotNull(strollerAdminService);
 		
 		strollerAdminService.deleteStroll(Long.valueOf(1));
+	}
+	
+	@Test
+	void testStrollUserComment() {
+		assertNotNull(strollerAdminService);
 
+		strollerUserCommentService.postComment(new StrollUserCommentRequest("test val", "test val", "test@val.co.za", "test val comment"));;
+		assertNotNull(strollUserCommentRepository.findAll());
 	}
 }

@@ -17,6 +17,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import lombok.extern.slf4j.Slf4j;
 import za.co.ashtech.stroller.controller.entities.Stroll;
+import za.co.ashtech.stroller.controller.entities.StrollUserCommentRequest;
 
 @Slf4j
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -91,6 +92,22 @@ class StrollerApplicationTests {
         //verify response is returned
         assertTrue(addStrollResponse.getStatusCode().is2xxSuccessful());
         
+    }
+    
+    @Test
+    void testStrollContact() throws Exception {       
+        
+        
+    	StrollUserCommentRequest strollUserComment = new StrollUserCommentRequest("First Name", "Last Name", "test2t.co.za", "This is my comment");
+
+        ResponseEntity<Void> strollContactResponse = restTemplate
+                .postForEntity("http://localhost:" + port + "/stroller/public/comment", strollUserComment, Void.class);     
+        
+       
+        //verify response is returned
+        assertTrue(strollContactResponse.getStatusCode().is2xxSuccessful());
+
+
     }
 
 }
