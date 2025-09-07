@@ -21,7 +21,7 @@ public class LoggingInterceptor implements ClientHttpRequestInterceptor {
 		
         logRequestDetails(request, body);
         ClientHttpResponse response = execution.execute(request, body);
-        logResponseDetails(response);
+        logResponseDetails(response,request.getURI().getHost());
         	
         return response;
 	}
@@ -37,7 +37,7 @@ public class LoggingInterceptor implements ClientHttpRequestInterceptor {
 	        }	       
 	    }
 
-	    private void logResponseDetails(ClientHttpResponse response) throws IOException {
+	    private void logResponseDetails(ClientHttpResponse response, String requestHost) throws IOException {
 	        String body = new BufferedReader(new InputStreamReader(response.getBody(), StandardCharsets.UTF_8))
 	                .lines()
 	                .collect(Collectors.joining("\n"));

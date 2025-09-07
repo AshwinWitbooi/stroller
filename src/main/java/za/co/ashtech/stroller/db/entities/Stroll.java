@@ -12,19 +12,24 @@ public class Stroll {
 
     @Column(nullable = false)
     private String name;
+    
+    private String description;
 
     private String location;
 
     private Double latitude;
 
     private Double longitude;
+    
+    private String image;
 
     // Constructors
     public Stroll() {
     }
 
-    public Stroll(String name, String location, Double latitude, Double longitude) {
+    public Stroll(String name,String description, String location, Double latitude, Double longitude) {
         this.name = name;
+        this.description = description;
         this.location = location;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -43,7 +48,15 @@ public class Stroll {
         this.name = name;
     }
 
-    public String getLocation() {
+    public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getLocation() {
         return location;
     }
 
@@ -67,9 +80,17 @@ public class Stroll {
         this.longitude = longitude;
     }
 
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 	@Override
 	public String toString() {
 		return "StrollerDEntity [id=" + id + ", name=" + name + ", location=" + location + ", latitude=" + latitude
-				+ ", longitude=" + longitude + "]";
+				+ ", longitude=" + longitude + image +"]";
 	}
 }

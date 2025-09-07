@@ -1,9 +1,12 @@
 package za.co.ashtech.stroller.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,6 +39,17 @@ public class AdminStrollerController extends BaseController{
     public ResponseEntity<Void> deleteStroll(@PathVariable Long id) throws StrollerServiceException{
     	strollerAdminService.deleteStroll(id);
         return ResponseEntity.noContent().build();
+    }
+    
+
+    @GetMapping("strolls")
+    public ResponseEntity<List<Stroll>> getAllStrolls() throws StrollerServiceException{
+        return ResponseEntity.ok(strollerAdminService.getAllStrolls());
+    }
+    
+    @GetMapping("stroll/{strollName}")
+    public ResponseEntity<Stroll>  getUserById(@PathVariable("strollName") String strollName) throws StrollerServiceException{
+        return ResponseEntity.ok(strollerAdminService.getStrollByName(strollName));
     }
 
 }

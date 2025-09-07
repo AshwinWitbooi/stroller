@@ -11,15 +11,21 @@ import lombok.Setter;
 import lombok.ToString;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "name", "location", "longitude", "latitude" })
+@JsonPropertyOrder({ "name","description", "location", "longitude", "latitude", "image" })
 @Getter
 @Setter
 @ToString
 public class Stroll {
-
+	
+	@NotNull
+	@JsonProperty("id")
+	private Long id;
 	@NotNull
 	@JsonProperty("name")
 	private String name;
+	@NotNull
+	@JsonProperty("description")
+	private String description;
 	@NotNull
 	@JsonProperty("location")
 	private String location;
@@ -29,11 +35,14 @@ public class Stroll {
 	@NotNull
 	@JsonProperty("latitude")
 	private String latitude;
+	@JsonProperty("image")
+	private String image;
 	
 	
-	public Stroll(String name, String location, String longitude, String latitude) {
+	public Stroll(String name, String description,String location, String longitude, String latitude) {
 		super();
 		this.name = name;
+		this.description = description;
 		this.location = location;
 		this.longitude = longitude;
 		this.latitude = latitude;

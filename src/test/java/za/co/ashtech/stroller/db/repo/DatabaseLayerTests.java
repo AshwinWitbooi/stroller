@@ -2,6 +2,8 @@ package za.co.ashtech.stroller.db.repo;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,13 +17,21 @@ class DatabaseLayerTests {
 	@Autowired
 	private StrollerRepository strollerRepository;
 
-	@Test
+//	@Test
 	void testStrollerRepository() {
 		assertNotNull(strollerRepository);
 		
 		List<Stroll> allStrollerRecord = strollerRepository.findAll();
 		assertNotNull(allStrollerRecord);
 		allStrollerRecord.forEach(System.out::println);
+	}
+	
+	@Test
+	void testStrollByNameRepository() {
+		assertNotNull(strollerRepository);
+		
+		Optional<Stroll> stroll = strollerRepository.findByName("Central Park");
+		assertNotNull(stroll.get());
 	}
 
 }

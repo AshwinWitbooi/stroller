@@ -43,7 +43,7 @@ class StrollerApplicationTests {
     @Test
     void testAddStroll() throws Exception {       
        
-       Stroll strollAdd = new Stroll("inTestName", "inTestLocation", "-12.3364", "6.6364");
+       Stroll strollAdd = new Stroll("inTestName","descriptionTest", "inTestLocation", "-12.3364", "6.6364");
        
        ResponseEntity<Void> addStrollResponse =  restTemplate.postForEntity("http://localhost:" + port + "/stroller/admin/api/v1/stroll", strollAdd, Void.class);
       
@@ -54,7 +54,7 @@ class StrollerApplicationTests {
     @Test
 	void testUpdateStroll() throws Exception {       
 	
-	   Stroll strollAdd = new Stroll("inTestName", "inTestLocation", "-12.3364", "6.6364");
+	   Stroll strollAdd = new Stroll("inTestName","descriptionTest", "inTestLocation", "-12.3364", "6.6364");
 	   
 	   HttpHeaders headers = new HttpHeaders();
 	   headers.set("Content-Type", "application/json");

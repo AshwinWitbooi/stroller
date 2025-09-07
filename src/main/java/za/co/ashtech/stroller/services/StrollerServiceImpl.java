@@ -32,8 +32,12 @@ public class StrollerServiceImpl implements StrollerService {
 		za.co.ashtech.stroller.db.entities.Stroll dEntity = opStrollDbe
 				.orElseThrow(() -> new StrollerServiceException("Unable to successfully retrieve a random Stroll."));
 
-		return new Stroll(dEntity.getName(), dEntity.getLocation(), Double.toString(dEntity.getLongitude()),
+		Stroll stroll = new Stroll(dEntity.getName(),dEntity.getDescription(), dEntity.getLocation(), Double.toString(dEntity.getLongitude()),
 				Double.toString(dEntity.getLatitude()));
+		
+		stroll.setImage(dEntity.getImage());
+		
+		return stroll; 
 
 	}
 

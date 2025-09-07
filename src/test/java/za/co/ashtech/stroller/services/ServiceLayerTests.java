@@ -37,7 +37,7 @@ class ServiceLayerTests {
 	void testAddStroll() {
 		assertNotNull(strollerAdminService);
 		
-		Stroll stroll = new Stroll("unitName", "unitTestLoc", "132.33", "36.664");
+		Stroll stroll = new Stroll("unitName","descriptionTest", "unitTestLoc", "132.33", "36.664");
 		Stroll strollResponse = strollerAdminService.addStroll(stroll);
 		assertNotNull(strollResponse);
 		log.info(strollResponse.toString());
@@ -47,7 +47,7 @@ class ServiceLayerTests {
 	void testUpdateStroll() {
 		assertNotNull(strollerAdminService);
 		
-		Stroll stroll = new Stroll("unitName", "unitTestLoc", "132.33", "36.664");
+		Stroll stroll = new Stroll("unitName","descriptionTest", "unitTestLoc", "132.33", "36.664");
 		Stroll strollResponse = strollerAdminService.updateStroll(Long.valueOf(1),stroll);
 		assertNotNull(strollResponse);
 		log.info(strollResponse.toString());
@@ -62,9 +62,15 @@ class ServiceLayerTests {
 	
 	@Test
 	void testStrollUserComment() {
-		assertNotNull(strollerAdminService);
+		assertNotNull(strollerUserCommentService);
 
 		strollerUserCommentService.postComment(new StrollUserCommentRequest("test val", "test val", "test@val.co.za", "test val comment"));;
 		assertNotNull(strollUserCommentRepository.findAll());
+	}
+	
+	@Test
+	void testAllStrolls() {
+		assertNotNull(strollerAdminService);
+		assertNotNull(strollerAdminService.getAllStrolls());
 	}
 }

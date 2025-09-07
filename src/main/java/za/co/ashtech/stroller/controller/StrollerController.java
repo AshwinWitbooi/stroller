@@ -18,7 +18,7 @@ public class StrollerController extends BaseController{
     private StrollerService strollerService;
 
     @GetMapping("stroll")
-    public ResponseEntity<Stroll> getAllCustomers() throws StrollerServiceException{
+    public ResponseEntity<Stroll> getStroll() throws StrollerServiceException{
         return ResponseEntity.ok(strollerService.getRandomStroll());
     }
 
