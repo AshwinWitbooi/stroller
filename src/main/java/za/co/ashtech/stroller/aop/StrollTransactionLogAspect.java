@@ -1,5 +1,7 @@
 package za.co.ashtech.stroller.aop;
 
+import java.util.Optional;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -20,8 +22,9 @@ public class StrollTransactionLogAspect {
 	@Autowired
 	private StrollTransactionLogRepository auditTrailRepository;
 	
-    @Pointcut("execution(* za.co.ashtech.stroller.services.*.*(..)) && !execution(* za.co.ashtech.stroller.services.StrollUserDetailsService.*(..))")
-    public void serviceMethods() {}
+//    @Pointcut("execution(* za.co.ashtech.stroller.services.*.*(..)) && !execution(* za.co.ashtech.stroller.services.StrollUserDetailsService.*(..))")
+	 @Pointcut("execution(* za.co.ashtech.stroller.services.*.*(..))")
+	public void serviceMethods() {}
     
     String userId = null;
     String transacionType = null;
@@ -29,7 +32,7 @@ public class StrollTransactionLogAspect {
 
     @Around("serviceMethods()")
     public Object logAuditTrail(ProceedingJoinPoint joinPoint) throws Throwable {
-                		 
+    	                		 
 		transacionType = joinPoint.getSignature().getName();
 		HttpServletRequest request = null;
 		ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -43,16 +46,13 @@ public class StrollTransactionLogAspect {
 		 * method args object
 		 */
 	    if(!transacionType.equalsIgnoreCase("postComment")) {
-	    	userId = request.getParameter("userId");
+	    		//Default to integration test
+	    		userId = Optional.ofNullable(request.getParameter("userId")).orElse("integration@test");
 	    }else {
-	    	StrollUserCommentRequest strollUserComment = (StrollUserCommentRequest) joinPoint.getArgs()[0];
-	    	if(strollUserComment != null) {
-	    		userId = strollUserComment.getEmail();
-	    	}else {
-	    		userId = "anon@anon.co.za";
-	    	}
-	    	
+    		userId = "user-comment";	    	
 	    }
+	    
+	    
         	
         // continue method execution
         Object result = joinPoint.proceed();
