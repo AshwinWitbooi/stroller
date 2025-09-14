@@ -29,12 +29,15 @@ public class StrollerServiceImpl implements StrollerService {
 		Optional<za.co.ashtech.stroller.db.entities.Stroll> opStrollDbe = Optional.ofNullable(strollRecordsList.get(rand.nextInt(strollRecordsList.size())));
 		log.debug("Random database record successfully returned.");
 		
-		za.co.ashtech.stroller.db.entities.Stroll dEntity = opStrollDbe
-				.orElseThrow(() -> new StrollerServiceException("Unable to successfully retrieve a random Stroll."));
-
-		return new Stroll(dEntity.getName(), dEntity.getLocation(), Double.toString(dEntity.getLongitude()),
-				Double.toString(dEntity.getLatitude()));
-
+		/*
+		 * Map database entity to JSON entity and return else throw
+		 * StrollerServiceException
+		 */
+		return opStrollDbe
+			.map(dr -> {
+				return new Stroll(dr.getStrollId().toString(),dr.getStrollName(),dr.getDescription(),dr.getLocation(),dr.getLatitude().toString(),dr.getLongitude().toString(),dr.getImage());
+			})
+			.orElseThrow(() -> new StrollerServiceException("Unable to successfully retrieve a random Stroll."));
 	}
 
 }

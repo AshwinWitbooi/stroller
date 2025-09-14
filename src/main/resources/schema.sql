@@ -1,9 +1,12 @@
 CREATE TABLE stroll (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    stroll_id BIGINT NOT NULL UNIQUE,
+    stroll_name VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
     location VARCHAR(255),
     latitude DOUBLE,
-    longitude DOUBLE
+    longitude DOUBLE,
+    image VARCHAR(150)
 );
 
 CREATE TABLE stroll_user (

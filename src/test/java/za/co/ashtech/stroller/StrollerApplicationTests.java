@@ -3,9 +3,8 @@ package za.co.ashtech.stroller;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import java.io.File;
 import java.util.List;
-
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -16,14 +15,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import lombok.extern.slf4j.Slf4j;
 import za.co.ashtech.stroller.controller.entities.AuthTokenResponse;
 import za.co.ashtech.stroller.controller.entities.Stroll;
@@ -45,7 +45,6 @@ class StrollerApplicationTests {
 	private ObjectMapper objectMapper = new ObjectMapper();
 	@Autowired
 	private StrollTransactionLogRepository auditTrailRepository;
-	private	String userId = "test_me1@testcom.co.za";
     
 	@Test
 	@Order(1)
@@ -70,7 +69,7 @@ class StrollerApplicationTests {
        HttpEntity<String> entity = new HttpEntity<>(null, this.setUpHeaders(this.accessToken));
 
        ResponseEntity<Stroll> responseStroll = restTemplate
-               .exchange("http://localhost:" + port + "/stroller/api/v1/stroll?userId="+userId, HttpMethod.GET, entity, Stroll.class);
+               .exchange("http://localhost:" + port + "/stroller/api/v1/stroll", HttpMethod.GET, entity, Stroll.class);
         
        //verify response is returned
        assertTrue(responseStroll.getStatusCode().is2xxSuccessful());
@@ -82,14 +81,31 @@ class StrollerApplicationTests {
     @Test
     @Order(3)
     void testAddStroll() throws Exception {       
-
+       //JSON request
+       Stroll strollAdd = new Stroll("1", "Stroll_1", "Test stroll being added.", "Junitville JVM Town", "-12226", "122236", "iunit.jpeg");
+     
+       String jsonString = objectMapper.writeValueAsString(strollAdd);
        
-       Stroll strollAdd = new Stroll("inTestName", "inTestLocation", "-12.3364", "6.6364");
+       // Create the multipart body
+       MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+       body.add("stroll", new HttpEntity<>(jsonString));
+       
+       // Add the file using ByteArrayResource
+       FileSystemResource fileAsResource = new FileSystemResource(new File("src/test/resources/itest.jpg"));
+       
+       body.add("file", fileAsResource);
 
-       HttpEntity<String> entity = new HttpEntity<>(objectMapper.writeValueAsString(strollAdd), setUpHeaders(this.accessToken));
+       HttpHeaders headers = new HttpHeaders();
+       headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+       headers.set("Authorization", "Bearer "+accessToken);
+       headers.set("Accept","*/*");
+       headers.set("Accept-Encoding","gzip, deflate, br");
+       headers.setConnection("Keep Alive");
 
+       HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+       
        ResponseEntity<Void> addStrollResponse = restTemplate
-               .exchange("http://localhost:" + port + "/stroller/admin/api/v1/stroll?userId="+userId, HttpMethod.POST, entity, Void.class);
+               .exchange("http://localhost:" + port + "/stroller/admin/api/v1/stroll", HttpMethod.POST, requestEntity, Void.class);
       
        //verify response is returned
        assertTrue(addStrollResponse.getStatusCode().is2xxSuccessful());
@@ -101,12 +117,12 @@ class StrollerApplicationTests {
     @Order(4)
     void testUpdateStroll() throws Exception {       
 
-       Stroll strollAdd = new Stroll("inTestName", "inTestLocation", "-12.3364", "6.6364");
+       Stroll strollAdd = new Stroll("1", "Stroll_1", "Test stroll being added.", "Junitville JVM Town", "-12226", "122236", "iunit.jpeg");
 
         HttpEntity<String> entity = new HttpEntity<>(objectMapper.writeValueAsString(strollAdd), setUpHeaders(this.accessToken));
 
         ResponseEntity<Void> addStrollResponse = restTemplate
-                .exchange("http://localhost:" + port + "/stroller/admin/api/v1/stroll/1?userId="+userId, HttpMethod.PUT, entity, Void.class);
+                .exchange("http://localhost:" + port + "/stroller/admin/api/v1/stroll/10", HttpMethod.PUT, entity, Void.class);
         List<StrollTransactionLog> recs = auditTrailRepository.findAll();
         log.debug(""+recs.size());
         //verify response is returned
@@ -122,7 +138,7 @@ class StrollerApplicationTests {
         HttpEntity<String> entity = new HttpEntity<>(null, setUpHeaders(this.accessToken));
 
         ResponseEntity<Void> addStrollResponse = restTemplate
-                .exchange("http://localhost:" + port + "/stroller/admin/api/v1/stroll/1?userId="+userId, HttpMethod.DELETE, entity, Void.class);
+                .exchange("http://localhost:" + port + "/stroller/admin/api/v1/stroll/10", HttpMethod.DELETE, entity, Void.class);
        
         //verify response is returned
         assertTrue(addStrollResponse.getStatusCode().is2xxSuccessful());
