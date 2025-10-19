@@ -10,6 +10,5 @@ import za.co.ashtech.stroller.db.entities.Stroll;
 public interface StrollerRepository extends JpaRepository<Stroll, Long> {
 	
 	Optional<Stroll> findByStrollId(Integer strollId);
-	void deleteByStrollId(Integer strollId);
 
 }

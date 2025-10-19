@@ -101,11 +101,6 @@
 		    <artifactId>spring-security-test</artifactId>
 		    <scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>za.co.ashtech</groupId>
-			<artifactId>jar-test</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>

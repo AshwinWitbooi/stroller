@@ -1,8 +1,10 @@
-package za.co.ashtech.stroller.services;
+	package za.co.ashtech.stroller.services;
 
 import java.io.File;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +28,6 @@ public class StrollerAdminServiceImpl implements StrollerAdminService {
 	@Override
 	public void addStroll(String requestJson, MultipartFile file) throws StrollerServiceException {
 
-		za.co.ashtech.stroller.db.entities.Stroll dbo = null;
-
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		try {
@@ -48,7 +48,7 @@ public class StrollerAdminServiceImpl implements StrollerAdminService {
 			 *persist database entity
 			 *values mapped from request entity
 			 */
-			dbo = strollerRepository.save(new za.co.ashtech.stroller.db.entities.Stroll(strollId, stroll.getName(), stroll.getDescription(), stroll.getLocation(), Double.parseDouble(stroll.getLatitude()), Double.parseDouble(stroll.getLongitude()), fileName));
+			strollerRepository.save(new za.co.ashtech.stroller.db.entities.Stroll(strollId, stroll.getName(), stroll.getDescription(), stroll.getLocation(), Double.parseDouble(stroll.getLatitude()), Double.parseDouble(stroll.getLongitude()), fileName));
 			log.debug("-D DATABASE ENTITY SUCCESSFULLY PERSISTED");
 		} catch (NumberFormatException e) {
 			throw new StrollerServiceException("Error saving stroll", e);
@@ -92,10 +92,33 @@ public class StrollerAdminServiceImpl implements StrollerAdminService {
 	@Override
 	public void deleteStroll(String strollId) throws StrollerServiceException {
 		try {
-			strollerRepository.deleteByStrollId(1);
+			
+			 Optional<za.co.ashtech.stroller.db.entities.Stroll> toDelete = strollerRepository.findByStrollId(Integer.parseInt(strollId));
+			 
+			 strollerRepository.delete(toDelete.orElseThrow(() -> new NullPointerException("Stroll not found")));
+
 		} catch (Exception e) {
 			throw new StrollerServiceException(e);
 		}
+	}
+	
+	@Override
+	public List<Stroll> getAllStrolls() throws StrollerServiceException {
+		List<Stroll> strollList = null;
+		
+		strollList = strollerRepository.findAll().stream()
+									.map(dbr -> {		
+										Stroll stroll = new Stroll(Integer.toString(dbr.getStrollId()),dbr.getStrollName(), dbr.getDescription(), dbr.getLocation(), dbr.getLongitude().toString(), dbr.getLongitude().toString(),dbr.getImage());
+										return stroll;
+									}).collect(Collectors.toList());
+		return strollList;
+	}
+
+	@Override
+	public Stroll getStrollById(String strollId) throws StrollerServiceException {
+		return strollerRepository.findByStrollId(Integer.parseInt(strollId)).map(s -> {			
+			return new Stroll(Integer.toString(s.getStrollId()), s.getStrollName(), s.getDescription(), s.getLocation(),s.getLatitude().toString(),s.getLongitude().toString(), s.getImage());
+		}).orElseThrow(() -> new StrollerServiceException("Error retrieving data."));
 	}
 
 

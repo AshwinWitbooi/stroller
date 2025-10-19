@@ -82,7 +82,7 @@ class StrollerApplicationTests {
     @Order(3)
     void testAddStroll() throws Exception {       
        //JSON request
-       Stroll strollAdd = new Stroll("1", "Stroll_1", "Test stroll being added.", "Junitville JVM Town", "-12226", "122236", "iunit.jpeg");
+       Stroll strollAdd = new Stroll("Stroll_1", "Test stroll being added.", "Junitville JVM Town", "-12226", "122236", "iunit.jpeg");
      
        String jsonString = objectMapper.writeValueAsString(strollAdd);
        

@@ -15,8 +15,8 @@
         </encoder>
     </appender>
 
-    <!-- Profile-specific: DEV -->
-    <springProfile name="dev">
+    <!-- Profile-specific: DEV and QA-->
+    <springProfile name="dev,qa">
         <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${LOG_DIR}/${APP_NAME}.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">

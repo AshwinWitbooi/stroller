@@ -1,10 +1,13 @@
 package za.co.ashtech.stroller.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -38,8 +41,20 @@ public class AdminStrollerController {
     	return ResponseEntity.ok(strollerAdminService.updateStroll(strollId, stroll));
     }
     
-    @DeleteMapping("stroll/{id}")
-    public ResponseEntity<Void> deleteStroll(@PathVariable Long id) throws StrollerServiceException{
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("stroll/{strollId}")
+    public ResponseEntity<Void> deleteStroll(@PathVariable String strollId) throws StrollerServiceException{
+    	strollerAdminService.deleteStroll(strollId);
+    	return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("stroll")
+    public ResponseEntity<List<Stroll>> getAllStrolls() throws StrollerServiceException{
+    	List<Stroll> strolls = strollerAdminService.getAllStrolls();
+    	return ResponseEntity.ok(strolls);
+    }
+    
+    @GetMapping("stroll/{strollId}")
+    public ResponseEntity<Stroll>  getUserById(@PathVariable("strollId") String strollId) throws StrollerServiceException{
+        return ResponseEntity.ok(strollerAdminService.getStrollById(strollId));
     }
 }

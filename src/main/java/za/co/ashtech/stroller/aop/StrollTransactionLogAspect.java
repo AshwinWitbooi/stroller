@@ -22,8 +22,8 @@ public class StrollTransactionLogAspect {
 	@Autowired
 	private StrollTransactionLogRepository auditTrailRepository;
 	
-//    @Pointcut("execution(* za.co.ashtech.stroller.services.*.*(..)) && !execution(* za.co.ashtech.stroller.services.StrollUserDetailsService.*(..))")
-	 @Pointcut("execution(* za.co.ashtech.stroller.services.*.*(..))")
+    @Pointcut("execution(* za.co.ashtech.stroller.services.*.*(..)) && !execution(* za.co.ashtech.stroller.services.StrollUserDetailsService.*(..))")
+//	 @Pointcut("execution(* za.co.ashtech.stroller.services.*.*(..))")
 	public void serviceMethods() {}
     
     String userId = null;
@@ -51,6 +51,8 @@ public class StrollTransactionLogAspect {
 	    }else {
     		userId = "user-comment";	    	
 	    }
+	    
+	    userId = "nonesecure@test.no.user";
 	    
 	    
         	

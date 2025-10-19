@@ -1,5 +1,7 @@
 package za.co.ashtech.stroller.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,13 +13,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import za.co.ashtech.stroller.services.StrollUserDetailsService;
 
+@Profile("dev")
 @Configuration
-@Profile("!dev")
 @EnableWebSecurity
-public class SecurityConfig {
+public class LocalSecurityConfig {
 	
 	@Autowired
     private StrollUserDetailsService strollUserDetailsService;
@@ -26,6 +31,8 @@ public class SecurityConfig {
 	@Order(1)
     public SecurityFilterChain basicAuthFilterChain(HttpSecurity http) throws Exception {
         http
+        	.cors()
+        	.and()
         	.securityMatcher("/oauth/**")
         	.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
@@ -49,6 +56,8 @@ public class SecurityConfig {
 	@Order(2)
 	public SecurityFilterChain jwtAuthFilterChain(HttpSecurity http) throws Exception {
 		http
+			.cors()
+			.and()
 			.securityMatcher("/admin/api/**","/api/v1/**")
 			.csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(
@@ -62,4 +71,19 @@ public class SecurityConfig {
 		return http.build();
 		
 	}
+	
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("*")); // Use specific origins in production
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(false); // set true if using credentials like cookies
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
+
 }

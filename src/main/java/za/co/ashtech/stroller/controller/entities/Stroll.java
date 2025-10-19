@@ -33,6 +33,16 @@ public class Stroll {
 	public Stroll() {
 		super();
 	}
+	
+	public Stroll(String name, String description, String location, String longitude, String latitude, String image) {
+		super();
+		this.name = name;
+		this.description = description;
+		this.location = location;
+		this.longitude = longitude;
+		this.latitude = latitude;
+		this.image = image;
+	}
 
 	public Stroll(String strollId,String name, String description, String location, String longitude, String latitude, String image) {
 		super();
