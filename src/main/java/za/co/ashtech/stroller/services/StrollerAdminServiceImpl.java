@@ -48,7 +48,7 @@ public class StrollerAdminServiceImpl implements StrollerAdminService {
 			 *persist database entity
 			 *values mapped from request entity
 			 */
-			strollerRepository.save(new za.co.ashtech.stroller.db.entities.Stroll(strollId, stroll.getName(), stroll.getDescription(), stroll.getLocation(), Double.parseDouble(stroll.getLatitude()), Double.parseDouble(stroll.getLongitude()), fileName));
+			strollerRepository.save(new za.co.ashtech.stroller.db.entities.Stroll(strollId, stroll.getName(), stroll.getDescription(), stroll.getLocation(), Double.parseDouble(stroll.getLatitude()), Double.parseDouble(stroll.getLongitude()),"/images/"+fileName));
 			log.debug("-D DATABASE ENTITY SUCCESSFULLY PERSISTED");
 		} catch (NumberFormatException e) {
 			throw new StrollerServiceException("Error saving stroll", e);
