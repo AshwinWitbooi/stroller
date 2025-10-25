@@ -40,7 +40,11 @@ public class StrollerAdminServiceImpl implements StrollerAdminService {
 			 writeByteArrayToFile(uploadedFile, file.getBytes());
 			
 			//Convert JSON request string to Stroll object
-			Stroll stroll = objectMapper.readValue(requestJson, Stroll.class);
+			Stroll stroll = objectMapper.readValue(requestJson, Stroll.class);	
+			
+			if(strollerRepository.findByStrollName(stroll.getName()) != null) {
+				throw new StrollerServiceException("Stroll by that name already exist.");
+			}
 			
 			Integer strollId = new Random().nextInt(1000);
 			
