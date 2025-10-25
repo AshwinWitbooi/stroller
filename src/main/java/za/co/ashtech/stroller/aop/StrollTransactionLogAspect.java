@@ -1,16 +1,14 @@
 package za.co.ashtech.stroller.aop;
 
-import java.util.Optional;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import jakarta.servlet.http.HttpServletRequest;
-import za.co.ashtech.stroller.controller.entities.StrollUserCommentRequest;
 import za.co.ashtech.stroller.db.entities.StrollTransactionLog;
 import za.co.ashtech.stroller.db.repo.StrollTransactionLogRepository;
 
@@ -19,14 +17,19 @@ import za.co.ashtech.stroller.db.repo.StrollTransactionLogRepository;
 @Component
 public class StrollTransactionLogAspect {
 	
+    private final HttpServletRequest request;
+	
 	@Autowired
 	private StrollTransactionLogRepository auditTrailRepository;
+
+
+    public StrollTransactionLogAspect(HttpServletRequest request) {
+        this.request = request;
+    }
 	
-    @Pointcut("execution(* za.co.ashtech.stroller.services.*.*(..)) && !execution(* za.co.ashtech.stroller.services.StrollUserDetailsService.*(..))")
-//	 @Pointcut("execution(* za.co.ashtech.stroller.services.*.*(..))")
+    @Pointcut("execution(* za.co.ashtech.stroller.services.*.*(..))")
 	public void serviceMethods() {}
     
-    String userId = null;
     String transacionType = null;
     String transacionResult = "Fail";
 
@@ -34,34 +37,14 @@ public class StrollTransactionLogAspect {
     public Object logAuditTrail(ProceedingJoinPoint joinPoint) throws Throwable {
     	                		 
 		transacionType = joinPoint.getSignature().getName();
-		HttpServletRequest request = null;
-		ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-	    if (attrs != null) {
-		   request = attrs.getRequest();
-		}
-	    
-	    
-		/*
-		 * Only extract userId from parameters if ist not a postContact else get from
-		 * method args object
-		 */
-	    if(!transacionType.equalsIgnoreCase("postComment")) {
-	    		//Default to integration test
-	    		userId = Optional.ofNullable(request.getParameter("userId")).orElse("integration@test");
-	    }else {
-    		userId = "user-comment";	    	
-	    }
-	    
-	    userId = "nonesecure@test.no.user";
-	    
-	    
+        String senderId = request.getHeader("SenderID");   
         	
         // continue method execution
         Object result = joinPoint.proceed();
         
         transacionResult = "Success";
         
-        auditTrailRepository.save(new StrollTransactionLog(userId, transacionType, transacionResult));
+		auditTrailRepository.save(new StrollTransactionLog(senderId , transacionType, transacionResult));
                     
         return result;
 
@@ -71,16 +54,9 @@ public class StrollTransactionLogAspect {
     @AfterThrowing(pointcut = "serviceMethods()", throwing = "ex")
     public void handleServiceExceptions(JoinPoint joinPoint, Throwable ex) {
 		transacionType = joinPoint.getSignature().getName();
-		HttpServletRequest request = null;
-		ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-	    if (attrs != null) {
-		   request = attrs.getRequest();
-		}
-
-	    userId = request.getParameter("userId");
-
+        String senderId = request.getHeader("SenderID");
         
-        auditTrailRepository.save(new StrollTransactionLog(userId, transacionType, transacionResult));
+        auditTrailRepository.save(new StrollTransactionLog(senderId, transacionType, transacionResult));
 
     }
 
