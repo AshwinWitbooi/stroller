@@ -44,7 +44,7 @@ public class LoggingFilter implements Filter {
 
 		// Log response body
 		String responseBody = new String(wrappedResponse.getContentAsByteArray());
-		log.info("RESPONSE BODY {}: ",responseBody.replaceAll("\\s", "").replaceAll("\\r\\n", ""));
+		log.info("RESPONSE BODY {}: ",responseBody.replaceAll("\\r\\n", ""));
 		
         // VERY IMPORTANT: copy body content back to the response output stream
 		wrappedResponse.copyBodyToResponse();
