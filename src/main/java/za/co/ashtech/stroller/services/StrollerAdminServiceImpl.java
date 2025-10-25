@@ -42,7 +42,9 @@ public class StrollerAdminServiceImpl implements StrollerAdminService {
 			//Convert JSON request string to Stroll object
 			Stroll stroll = objectMapper.readValue(requestJson, Stroll.class);	
 			
-			if(strollerRepository.findByStrollName(stroll.getName()) != null) {
+			strollerRepository.findByStrollName(stroll.getName());
+			
+			if(strollerRepository.findByStrollName(stroll.getName()).isPresent()) {
 				throw new StrollerServiceException("Stroll by that name already exist.");
 			}
 			
