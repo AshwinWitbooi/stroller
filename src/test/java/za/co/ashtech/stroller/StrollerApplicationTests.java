@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import za.co.ashtech.stroller.controller.entities.AuthTokenResponse;
 import za.co.ashtech.stroller.controller.entities.Stroll;
-import za.co.ashtech.stroller.controller.entities.StrollUserCommentRequest;
+import za.co.ashtech.stroller.controller.entities.StrollUserMessageRequest;
 import za.co.ashtech.stroller.db.entities.StrollTransactionLog;
 import za.co.ashtech.stroller.db.repo.StrollTransactionLogRepository;
 
@@ -150,7 +150,7 @@ class StrollerApplicationTests {
     void testStrollUserComment() throws Exception {       
         
         
-    	StrollUserCommentRequest strollUserComment = new StrollUserCommentRequest("First Name", "Last Name", "test2t.co.za", "This is my comment");
+    	StrollUserMessageRequest strollUserComment = new StrollUserMessageRequest("First Name","test2t.co.za", "This is my comment");
 
         ResponseEntity<Void> strollContactResponse = restTemplate
                 .postForEntity("http://localhost:" + port + "/stroller/public/comment", strollUserComment, Void.class);     

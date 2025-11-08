@@ -5,33 +5,30 @@ import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "STROLL_USER_COMMENT")
-public class StrollUserComment {
+@Table(name = "STROLL_USER_MESSAGE")
+public class StrollUserMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "first_name")
     private String firstname;
-    @Column(name = "last_name")
-    private String lastname;
     @Column(name = "email")
     private String email;
-    @Column(name = "user_comment")
-    private String userComment;
+    @Column(name = "user_message")
+    private String userMessage;
     @Column(name = "comment_timestamp")
     private LocalDateTime commentTimestamp;
     
-	public StrollUserComment() {
+	public StrollUserMessage() {
 		super();
 	}
     
-	public StrollUserComment(String firstname, String lastname, String email, String userComment) {
+	public StrollUserMessage(String firstname, String email, String userMessage) {
 		super();
 		this.firstname = firstname;
-		this.lastname = lastname;
 		this.email = email;
-		this.userComment = userComment;
+		this.userMessage = userMessage;
 		this.commentTimestamp = LocalDateTime.now();
 	}
 	public Long getId() {
@@ -46,24 +43,21 @@ public class StrollUserComment {
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
 	}
-	public String getLastname() {
-		return lastname;
-	}
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
 	public String getEmail() {
 		return email;
 	}
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getUserComment() {
-		return userComment;
+
+	public String getUserMessage() {
+		return userMessage;
 	}
-	public void setUserComment(String userComment) {
-		this.userComment = userComment;
+
+	public void setUserMessage(String userMessage) {
+		this.userMessage = userMessage;
 	}
+
 	public LocalDateTime getCommentTimestamp() {
 		return commentTimestamp;
 	}
