@@ -38,13 +38,13 @@ public class LoggingFilter implements Filter {
 		if(wrappedRequest.getMethod().equalsIgnoreCase("POST")) {
 			// Log request body
 			String requestBody = new String(wrappedRequest.getContentAsByteArray());
-			log.info("REQUEST BODY {}: ",requestBody.replaceAll("\\s", "").replaceAll("\\r\\n", ""));
+			log.info("REQUEST BODY {}: ",requestBody.replaceAll("\\n", ""));
 			
 		}
 
 		// Log response body
 		String responseBody = new String(wrappedResponse.getContentAsByteArray());
-		log.info("RESPONSE BODY {}: ",responseBody.replaceAll("\\r\\n", ""));
+		log.info("RESPONSE BODY {}: ",responseBody.replaceAll("\\n", ""));
 		
         // VERY IMPORTANT: copy body content back to the response output stream
 		wrappedResponse.copyBodyToResponse();
