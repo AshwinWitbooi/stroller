@@ -29,24 +29,23 @@ public class LocalSecurityConfig {
 	
 	@Bean
 	@Order(1)
-    public SecurityFilterChain basicAuthFilterChain(HttpSecurity http) throws Exception {
-        http
-        	.cors()
-        	.and()
-        	.securityMatcher("/oauth/**")
-        	.csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-            	.requestMatchers("/public/**").permitAll()
-                .requestMatchers("/oauth/access/token").authenticated()
-                .anyRequest().permitAll()
-            )
-            .httpBasic(Customizer.withDefaults())
-            .userDetailsService(strollUserDetailsService);
-        return http.build();
-    }
+	public SecurityFilterChain basicAuthFilterChain(HttpSecurity http) throws Exception {
+	    http
+	    	.csrf(csrf -> csrf.disable())	 
+	    	.cors(Customizer.withDefaults()) 
+	        .securityMatcher("/oauth/**", "/public/**") // ensure matcher covers both paths
+	        .authorizeHttpRequests(auth -> auth
+	            .requestMatchers("/public/**").permitAll()
+	            .requestMatchers("/oauth/access/token").authenticated()
+	            .anyRequest().authenticated()
+	        )
+	        .httpBasic(Customizer.withDefaults())
+	        .userDetailsService(strollUserDetailsService);
+
+	    return http.build();
+	}
 	
 
-	
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -56,13 +55,12 @@ public class LocalSecurityConfig {
 	@Order(2)
 	public SecurityFilterChain jwtAuthFilterChain(HttpSecurity http) throws Exception {
 		http
-			.cors()
-			.and()
-			.securityMatcher("/admin/api/**","/api/v1/**")
 			.csrf(csrf -> csrf.disable())
+	    	.cors(Customizer.withDefaults()) 
+			.securityMatcher("/api/v1/**")
             .authorizeHttpRequests(
 				auth -> auth
-				.requestMatchers("/admin/api/v1/stroll/**", "/api/v1/stroll").authenticated()
+				.requestMatchers("/api/v1/stroll").authenticated()
 			)
 			.oauth2ResourceServer(
 						oauth2 -> oauth2.jwt(Customizer.withDefaults())
@@ -72,18 +70,18 @@ public class LocalSecurityConfig {
 		
 	}
 	
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("*")); // Use specific origins in production
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(false); // set true if using credentials like cookies
+	
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+	    CorsConfiguration config = new CorsConfiguration();
+	    config.setAllowedOrigins(List.of("http://localhost:8080"));
+	    config.setAllowedMethods(List.of("*")); // GET, POST, PUT, DELETE, OPTIONS
+	    config.setAllowedHeaders(List.of("*"));
+	    config.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
-        return source;
-    }
+	    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	    source.registerCorsConfiguration("/**", config);
+	    return source;
+	}
 
 }
