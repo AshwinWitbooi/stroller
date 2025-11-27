@@ -1,6 +1,7 @@
 	package za.co.ashtech.stroller.services;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -15,6 +16,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 import za.co.ashtech.stroller.controller.entities.Stroll;
+import za.co.ashtech.stroller.controller.entities.TransactionLogEntry;
+import za.co.ashtech.stroller.db.repo.StrollTransactionLogRepository;
 import za.co.ashtech.stroller.db.repo.StrollerRepository;
 import za.co.ashtech.stroller.util.StrollerServiceException;
 
@@ -24,6 +27,8 @@ public class StrollerAdminServiceImpl implements StrollerAdminService {
 
 	@Autowired
 	private StrollerRepository strollerRepository;
+	@Autowired
+	private StrollTransactionLogRepository strollTransactionLogRepository;
 
 	@Override
 	public void addStroll(String requestJson, MultipartFile file) throws StrollerServiceException {
@@ -125,6 +130,19 @@ public class StrollerAdminServiceImpl implements StrollerAdminService {
 		return strollerRepository.findByStrollId(Integer.parseInt(strollId)).map(s -> {			
 			return new Stroll(Integer.toString(s.getStrollId()), s.getStrollName(), s.getDescription(), s.getLocation(),s.getLatitude().toString(),s.getLongitude().toString(), s.getImage());
 		}).orElseThrow(() -> new StrollerServiceException("Error retrieving data."));
+	}
+
+	@Override
+	public List<TransactionLogEntry> getAllTransactions() throws StrollerServiceException {
+		
+		//Default to return if there are no entries transaction
+		List<TransactionLogEntry> defaultList = new ArrayList<>();
+		defaultList.add(new TransactionLogEntry());
+		
+		return Optional.ofNullable(strollTransactionLogRepository.findAll().stream().map(dbr -> {
+			return new TransactionLogEntry(dbr);
+		}).collect(Collectors.toList())).orElse(defaultList);
+
 	}
 
 

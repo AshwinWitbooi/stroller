@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import za.co.ashtech.stroller.controller.entities.Stroll;
+import za.co.ashtech.stroller.controller.entities.TransactionLogEntry;
 import za.co.ashtech.stroller.services.StrollerAdminService;
 import za.co.ashtech.stroller.util.StrollerServiceException;
 
@@ -56,5 +57,10 @@ public class AdminStrollerController {
     @GetMapping("stroll/{strollId}")
     public ResponseEntity<Stroll>  getUserById(@PathVariable("strollId") String strollId) throws StrollerServiceException{
         return ResponseEntity.ok(strollerAdminService.getStrollById(strollId));
+    }
+    
+    @GetMapping("transaction")
+    public ResponseEntity<List<TransactionLogEntry>>  getAllTransactions() throws StrollerServiceException{    	
+    	return ResponseEntity.ok(strollerAdminService.getAllTransactions());
     }
 }
