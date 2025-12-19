@@ -57,10 +57,10 @@ public class LocalSecurityConfig {
 		http
 			.csrf(csrf -> csrf.disable())
 	    	.cors(Customizer.withDefaults()) 
-			.securityMatcher("/admin/api/v1/stroll/**","/api/v1/**")
+			.securityMatcher("/admin/api/v1/**","/api/v1/**")
             .authorizeHttpRequests(
 				auth -> auth
-				.requestMatchers("/admin/api/v1/stroll/**","/api/v1/stroll").authenticated()
+				.requestMatchers("/admin/api/v1/**","/api/v1/stroll").authenticated()
 			)
 			.oauth2ResourceServer(
 						oauth2 -> oauth2.jwt(Customizer.withDefaults())
